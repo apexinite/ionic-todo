@@ -1,11 +1,9 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
 angular.module('todo', ['ionic'])
-
-
+/**
+ * The Projects factory handles saving and loading projects
+ * from local storage, and also lets us save and load the
+ * last active project index.
+ */
 .factory('Projects', function() {
   return {
     all: function() {
@@ -14,7 +12,7 @@ angular.module('todo', ['ionic'])
         return angular.fromJson(projectString);
       }
       return [];
-    }, 
+    },
     save: function(projects) {
       window.localStorage['projects'] = angular.toJson(projects);
     },
@@ -45,6 +43,7 @@ angular.module('todo', ['ionic'])
     $scope.selectProject(newProject, $scope.projects.length-1);
   }
 
+
   // Load or initialize projects
   $scope.projects = Projects.all();
 
@@ -66,15 +65,13 @@ angular.module('todo', ['ionic'])
     $ionicSideMenuDelegate.toggleLeft(false);
   };
 
-  // create and load the Modal
+  // Create our modal
   $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
     $scope.taskModal = modal;
   }, {
     scope: $scope
-    // animation: 'slide-in-up'
   });
 
-  // called when the form is submitted
   $scope.createTask = function(task) {
     if(!$scope.activeProject || !task) {
       return;
@@ -90,11 +87,10 @@ angular.module('todo', ['ionic'])
     task.title = "";
   };
 
-  // Open our new task modal
   $scope.newTask = function() {
     $scope.taskModal.show();
   };
-  // Close the new task modal
+
   $scope.closeNewTask = function() {
     $scope.taskModal.hide();
   }
@@ -103,14 +99,15 @@ angular.module('todo', ['ionic'])
     $ionicSideMenuDelegate.toggleLeft();
   };
 
-  // Try this to create the first project, 
-  // make sure to defer this by using $timeout 
-  // so everything is initialized properly
+
+  // Try to create the first project, make sure to defer
+  // this by using $timeout so everything is initialized
+  // properly
   $timeout(function() {
     if($scope.projects.length == 0) {
       while(true) {
-        var projectTitle = prompt('Your first project title');
-        if (projectTitle) {
+        var projectTitle = prompt('Your first project title:');
+        if(projectTitle) {
           createProject(projectTitle);
           break;
         }
